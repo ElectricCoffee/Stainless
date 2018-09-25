@@ -28,4 +28,13 @@ mod tests {
         let r2 = b.map(|x: Clean<i32>| x + Clean(2)).map_err(|x| x + Dirty(3));
         assert_eq!(r2, Err(Dirty(5)));
     }
+
+    #[test]
+    fn test_into() {
+        let a: Result<i32> = Clean(1).into();
+        let b: Result<i32> = Dirty(1).into();
+
+        assert_eq!(a, Ok(Clean(1)));
+        assert_eq!(b, Err(Dirty(1)));
+    }
 }
