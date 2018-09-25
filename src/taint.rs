@@ -1,12 +1,25 @@
 use std::ops::{Add};
-use std;
+use std::result;
+use std::convert::Into;
+
+pub type Result<T> = result::Result<Clean<T>, Dirty<T>>;
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct Clean<T>(pub T);
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct Dirty<T>(pub T);
 
-pub type Result<T> = std::result::Result<Clean<T>, Dirty<T>>;
+impl<T> Into<Result<T>> for Clean<T> {
+    fn into(self) -> Result<T> {
+        Ok(self)
+    }
+}
+
+impl<T> Into<Result<T>> for Dirty<T> {
+    fn into(self) -> Result<T> {
+        Err(self)
+    }
+}
 
 impl<A> Add<Clean<A>> for Clean<A> where A: Add {
     type Output = Clean<A::Output>;
