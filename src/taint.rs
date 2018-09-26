@@ -4,6 +4,10 @@ use std::convert::{Into, From};
 
 pub type Result<T> = result::Result<Clean<T>, Dirty<T>>;
 
+pub trait Sanitizer<T> {
+    fn sanitize(input: Dirty<T>) -> Clean<T>;
+}
+
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct Clean<T>(pub T);
 #[derive(Debug, Eq, PartialEq, Clone)]
