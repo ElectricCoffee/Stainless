@@ -39,6 +39,15 @@ mod tests {
     }
 
     #[test]
+    fn test_from() {
+        let a: Clean<i32> = 1.into();
+        let b: Dirty<i32> = 2.into();
+
+        assert_eq!(a, Clean(1));
+        assert_eq!(b, Dirty(2));
+    }
+
+    #[test]
     fn test_map() {
         let a = Clean(1).map(|x| x + 3);
         let b = Dirty(3).map(|x| x * 3);
