@@ -9,6 +9,31 @@ pub struct Clean<T>(pub T);
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct Dirty<T>(pub T);
 
+// (a -> b) -> m a -> m b
+impl<T> Clean<T> {
+    pub fn map<U, F>(self, f: F) -> Clean<U> where F: FnOnce(T) -> U {
+        let Clean(a) = self;
+        Clean(f(a))
+    }
+
+    pub fn and_then<U, F>(self, f: F) -> Clean<U> where F: FnOnce(T) -> Clean<U> {
+        let Clean(a) = self;
+        f(a)
+    }
+}
+
+impl<T> Dirty<T> {
+    pub fn map<U, F>(self, f: F) -> Dirty<U> where F: FnOnce(T) -> U {
+        let Dirty(a) = self;
+        Dirty(f(a))
+    }
+
+    pub fn and_then<U, F>(self, f: F) -> Dirty<U> where F: FnOnce(T) -> Dirty<U> {
+        let Dirty(a) = self;
+        f(a)
+    }
+}
+
 impl<T> Into<Result<T>> for Clean<T> {
     fn into(self) -> Result<T> {
         Ok(self)
