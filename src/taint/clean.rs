@@ -1,5 +1,5 @@
 use std::ops::{Add};
-use super::dirty::Dirty;
+use super::dirty::Dirty; // required for the operators
 
 #[derive(Clone, Copy, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
 pub struct Clean<T>(pub T);
@@ -69,6 +69,17 @@ impl<T> From<T> for Clean<T> {
 impl<A> Add<Clean<A>> for Clean<A> where A: Add {
     type Output = Clean<A::Output>;
     
+    /// Enables transparent addition between two clean values
+    /// 
+    /// # Examples
+    /// ```
+    /// extern crate stainless;
+    /// use stainless::taint::Clean;
+    /// 
+    /// let result = Clean(2) + Clean(8);
+    /// 
+    /// assert_eq!(result, Clean(10));
+    /// ```
     fn add(self, other: Clean<A>) -> Self::Output {
         Clean(Add::add(self.0, other.0))
     }
@@ -77,6 +88,18 @@ impl<A> Add<Clean<A>> for Clean<A> where A: Add {
 impl<A> Add<Dirty<A>> for Clean<A> where A: Add {
     type Output = Dirty<A::Output>;
     
+    /// Enables transparent addition between clean and dirty,
+    /// following the rule that clean + dirty = dirty
+    /// 
+    /// # Examples
+    /// ```
+    /// extern crate stainless;
+    /// use stainless::taint::{Dirty, Clean};
+    /// 
+    /// let result = Clean(20) + Dirty(40);
+    /// 
+    /// assert_eq!(result, Dirty(60));
+    /// ```
     fn add(self, other: Dirty<A>) -> Self::Output {
         Dirty(self.0 + other.0)
     }

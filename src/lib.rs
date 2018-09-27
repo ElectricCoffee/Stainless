@@ -1,3 +1,46 @@
+//! # stainless
+//! 
+//! Stainless is a crate that aims to provide static taint analysis for use in Rust programs, 
+//! by providing primitives to work with the notion of taintedness via the two new types [`Clean`] and [`Dirty`].
+//! 
+//! # Example
+//! One could easily imagine a scenario like the following:
+//! ```
+//! # extern crate stainless;
+//! # use stainless::taint::{Clean, Dirty};
+//! # fn get_input() -> String { "Corrupted!".into() }
+//! # fn db(_: &str) -> Vec<String> { vec!["Boom!".into()] }
+//! fn get_users(name: String) -> Vec<String> { 
+//!     let query = format!("SELECT * FROM Users WHERE username = '{}';", name);
+//!     db(&query)
+//! }
+//! 
+//! let data = get_input(); // reads some input from a website
+//! get_users(data);
+//! ```
+//! And then your entire database vomits out all user info because _someone_ forgot to sanitize the input.
+//! 
+//! So let's try the same example one more time, this time using stainless.
+//! ```compile_fail
+//! extern crate stainless;
+//! use stainless::taint::{Clean, Dirty};
+//! # fn get_input() -> String { "Corrupted!".into() }
+//! # fn db(_: &str) -> Vec<String> { vec!["Boom!".into()] }
+//! 
+//! fn get_users(name: Clean<String>) -> Clean<Vec<String>> { 
+//!     name.map(|n| format!("SELECT * FROM Users WHERE username = '{}';", n))
+//!         .map(|query| db(&query))
+//! }
+//! 
+//! let data: Dirty<String> = get_input().into(); // input explicitly tagged as `Dirty`
+//! get_users(data); // 💥 expected struct `stainless::taint::Clean`, found struct `stainless::taint::Dirty`
+//! ```
+//! Stainless ensures that you have to sanitize your input before you can go ahead and use it.
+//! If not, the compiler will refuse to accept the data. 
+//! 
+//! [`Clean`]: struct.Clean.html
+//! [`Dirty`]: struct.Dirty.html
+
 pub mod taint;
 
 #[cfg(test)]
