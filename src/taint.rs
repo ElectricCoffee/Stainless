@@ -1,6 +1,5 @@
 use std::ops::{Add};
 use std::result;
-use std::convert::{Into, From};
 
 pub type Result<T> = result::Result<Clean<T>, Dirty<T>>;
 
@@ -52,18 +51,6 @@ impl<T> From<T> for Clean<T> {
 impl<T> From<T> for Dirty<T> {
     fn from(data: T) -> Dirty<T> {
         Dirty(data)
-    }
-}
-
-impl<T> Into<Result<T>> for Clean<T> {
-    fn into(self) -> Result<T> {
-        Ok(self)
-    }
-}
-
-impl<T> Into<Result<T>> for Dirty<T> {
-    fn into(self) -> Result<T> {
-        Err(self)
     }
 }
 

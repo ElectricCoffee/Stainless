@@ -30,15 +30,6 @@ mod tests {
     }
 
     #[test]
-    fn test_into() {
-        let a: Result<i32> = Clean(1).into();
-        let b: Result<i32> = Dirty(1).into();
-
-        assert_eq!(a, Ok(Clean(1)));
-        assert_eq!(b, Err(Dirty(1)));
-    }
-
-    #[test]
     fn test_from() {
         let a: Clean<i32> = 1.into();
         let b: Dirty<i32> = 2.into();
