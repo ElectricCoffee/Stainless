@@ -1,7 +1,4 @@
 use std::ops::{Add};
-use std::result;
-
-pub type Result<T> = result::Result<Clean<T>, Dirty<T>>;
 
 pub trait Sanitizer<T> {
     fn sanitize(input: Dirty<T>) -> Clean<T>;
