@@ -7,9 +7,9 @@ pub trait Sanitizer<T> {
     fn sanitize(input: Dirty<T>) -> Clean<T>;
 }
 
-#[derive(Debug, Eq, PartialEq, Clone)]
+#[derive(Clone, Copy, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
 pub struct Clean<T>(pub T);
-#[derive(Debug, Eq, PartialEq, Clone)]
+#[derive(Clone, Copy, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
 pub struct Dirty<T>(pub T);
 
 impl<T> Clean<T> {
