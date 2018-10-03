@@ -66,6 +66,23 @@ impl<T> From<T> for Dirty<T> {
     }
 }
 
+impl<T> From<Clean<T>> for Dirty<T> {
+    /// Provides easy conversion from clean into dirty
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// # use stainless::stat::*;
+    /// let a: Dirty<i32> = Clean(-2).into();
+    /// 
+    /// assert_eq!(a, Dirty(-2))
+    /// ```
+    fn from(data: Clean<T>) -> Dirty<T> {
+        let Clean(a) = data;
+        Dirty(a)
+    }
+}
+
 impl<A> Add<Dirty<A>> for Dirty<A> where A: Add {
     type Output = Dirty<A::Output>;
     
