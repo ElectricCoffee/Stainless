@@ -43,6 +43,7 @@
 
 pub mod stat;
 pub mod dynamic;
+pub use dynamic::Dyn;
 
 #[cfg(test)]
 mod tests {
