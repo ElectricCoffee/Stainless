@@ -13,7 +13,7 @@ impl<T> Dirty<T> {
     /// 
     /// ```
     /// extern crate stainless;
-    /// use stainless::taint::Dirty;
+    /// use stainless::stat::Dirty;
     /// 
     /// let dirty_i32 = Dirty(5);
     /// let result = dirty_i32.map(|i| format!("{} is not a good number", i));
@@ -33,7 +33,7 @@ impl<T> Dirty<T> {
     /// 
     /// ```
     /// extern crate stainless;
-    /// use stainless::taint::Dirty;
+    /// use stainless::stat::Dirty;
     /// 
     /// fn to_dirty_string(i: i32) -> Dirty<String> { Dirty(format!("{} is a fine number", i)) }
     /// 
@@ -55,7 +55,7 @@ impl<T> From<T> for Dirty<T> {
     /// 
     /// ```
     /// extern crate stainless;
-    /// use stainless::taint::Dirty;
+    /// use stainless::stat::Dirty;
     /// 
     /// let a: Dirty<char> = 'A'.into();
     /// 
@@ -74,7 +74,7 @@ impl<A> Add<Dirty<A>> for Dirty<A> where A: Add {
     /// # Examples
     /// ```
     /// extern crate stainless;
-    /// use stainless::taint::Dirty;
+    /// use stainless::stat::Dirty;
     /// 
     /// let result = Dirty(2) + Dirty(4);
     /// 
@@ -94,7 +94,7 @@ impl<A> Add<Clean<A>> for Dirty<A> where A: Add {
     /// # Examples
     /// ```
     /// extern crate stainless;
-    /// use stainless::taint::{Dirty, Clean};
+    /// use stainless::stat::{Dirty, Clean};
     /// 
     /// let result = Dirty(2) + Clean(40);
     /// 

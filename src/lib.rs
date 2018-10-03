@@ -7,7 +7,7 @@
 //! One could easily imagine a scenario like the following:
 //! ```
 //! # extern crate stainless;
-//! # use stainless::taint::{Clean, Dirty};
+//! # use stainless::stat::{Clean, Dirty};
 //! # fn get_input() -> String { "Corrupted!".into() }
 //! # fn db(_: &str) -> Vec<String> { vec!["Boom!".into()] }
 //! fn get_users(name: String) -> Vec<String> { 
@@ -23,7 +23,7 @@
 //! So let's try the same example one more time, this time using stainless.
 //! ```compile_fail
 //! extern crate stainless;
-//! use stainless::taint::{Clean, Dirty};
+//! use stainless::stat::{Clean, Dirty};
 //! # fn get_input() -> String { "Corrupted!".into() }
 //! # fn db(_: &str) -> Vec<String> { vec!["Boom!".into()] }
 //! 
@@ -41,11 +41,12 @@
 //! [`Clean`]: struct.Clean.html
 //! [`Dirty`]: struct.Dirty.html
 
-pub mod taint;
+pub mod stat;
+pub mod dynamic;
 
 #[cfg(test)]
 mod tests {
-    use taint::{Clean, Dirty};
+    use stat::{Clean, Dirty};
 
     #[test] 
     fn test_add() {
