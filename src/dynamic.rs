@@ -1,5 +1,8 @@
 use stat;
 
+/// The Dyn enum exists to facilitate the handling of dynamic taintedness at the loss of static compile-time analysis.
+/// 
+/// Should not be used unless absolutely necessary.
 #[derive(Clone, Copy, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
 pub enum Dyn<A> {
     Clean(A),
